@@ -1,6 +1,9 @@
 package main
 
-import "strings"
+import (
+	"sort"
+	"strings"
+)
 
 func match(src, query string) bool {
 	if len(query) > len(src) {
@@ -63,4 +66,26 @@ func score(src, query string) int {
 	}
 
 	return matchScore
+}
+
+type fuzzySorter struct {
+	data []string
+	key  string
+}
+
+func (r fuzzySorter) Len() int {
+	return len(r.data)
+}
+
+func (r fuzzySorter) Less(i, j int) bool {
+	return score(r.data[i], r.key) < score(r.data[j], r.key)
+}
+
+func (r fuzzySorter) Swap(i, j int) {
+	r.data[i], r.data[j] = r.data[j], r.data[i]
+}
+
+func sortSlice(data []string, key string) []string {
+	sort.Sort(fuzzySorter{data: data, key: key})
+	return data
 }
