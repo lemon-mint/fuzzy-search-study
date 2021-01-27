@@ -36,30 +36,33 @@ func score(src, query string) int {
 	lastword := ""
 	wordScore := 0
 	for i := range query {
+		if src == query {
+			matchScore += len(src) * 200
+		}
 		for j := cur; j < len(src); j++ {
 			if src[j] == query[i] {
 				if j-cur == 1 {
 					lastword += src[j : j+1]
-					wordScore += len(lastword) * 2
+					wordScore += 20
 				} else {
 					lastword = src[j : j+1]
 					matchScore += wordScore
 					wordScore = 0
 				}
 				cur = j
-				matchScore += 10
+				matchScore += 100
 				break
 			} else if strings.ToLower(src[j:j+1]) == strings.ToLower(query[i:i+1]) {
 				if j-cur == 1 {
 					lastword += src[j : j+1]
-					wordScore += len(lastword) * 1
+					wordScore += 10
 				} else {
 					lastword = src[j : j+1]
 					matchScore += wordScore
 					wordScore = 0
 				}
 				cur = j
-				matchScore += 5
+				matchScore += 50
 				break
 			}
 		}
@@ -86,6 +89,6 @@ func (r fuzzySorter) Swap(i, j int) {
 }
 
 func sortSlice(data []string, key string) []string {
-	sort.Sort(fuzzySorter{data: data, key: key})
+	sort.Sort(sort.Reverse(fuzzySorter{data: data, key: key}))
 	return data
 }

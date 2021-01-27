@@ -18,3 +18,4 @@
 .env
 .vscode
 patches
+words.go
