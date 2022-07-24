@@ -1,3 +1,3 @@
 module github.com/lemon-mint/fuzzy-search-study
 
-go 1.15
+go 1.18
